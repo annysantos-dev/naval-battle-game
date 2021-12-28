@@ -1,8 +1,8 @@
 package br.com.letscode;
 
 public class Main {
-
     public static void main(String[] args) {
-	// write your code here
+        Jogo jogo = new Jogo();
+        jogo.telaInicial();
     }
 }
