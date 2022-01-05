@@ -1,9 +1,12 @@
 package br.com.letscode;
 
 import java.util.Scanner;
+import java.util.Random;
 
 public class Jogo {
+
     Scanner input;
+
     Tabuleiro tabuleiro = new Tabuleiro();
 
     public Jogo() {
@@ -52,11 +55,7 @@ public class Jogo {
         boolean continuarJogo = true;
         do {
             tabuleiro.exibirTabuleiro("JOGADOR", tabuleiro.tabuleiroJogador, false);
-            // tabuleiro.exibirTabuleiroDosDoisJogadores();
             if (jogada()) {
-                // validação do fim do jogo
-                // acão do computador
-                // validação do fim do jogo
             }
         } while (continuarJogo);
 
@@ -92,6 +91,7 @@ public class Jogo {
             return false;
         }
 
+        jogadaCPU();
         return true;
     }
 
@@ -105,7 +105,7 @@ public class Jogo {
     private void perguntaPosicionarNaviosManualOuAutomatico() {
         this.input = new Scanner(System.in);
 
-        System.out.println("Você deseja posicionar seus navios ou quer que sejam posicionados de forma aumatática?");
+        System.out.println("Você deseja posicionar seus navios ou quer que sejam posicionados de forma automática?");
         System.out.println("1 - Posicionar Manualmente");
         System.out.println("2 - Posicionar Automaticamente");
         tabuleiro.posicionarManualmente = input.nextInt();
@@ -168,5 +168,52 @@ public class Jogo {
         }
 
         return retorno;
+    }
+
+
+    public boolean jogadaCPU(){
+
+        System.out.println("CPU jogou...");
+
+        Random jogadaCpu = new Random();
+        String letraJogador = "abcdefghij", numeroJogador = "0123456789";
+
+        for (int i = 0; i < 1; i++) {
+
+            String novaLetra = String.valueOf(letraJogador.charAt(jogadaCpu.nextInt(letraJogador.length()))).toUpperCase();
+            String novoNumero = String.valueOf(numeroJogador.charAt(jogadaCpu.nextInt(numeroJogador.length()))).toUpperCase();
+            String jogadaCompleta = novaLetra + novoNumero;
+            String verificacaoCpu = "^[A-Za-z]{1}[0-9]{1}$";
+            System.out.println(jogadaCompleta);
+
+            if (jogadaCompleta.matches(verificacaoCpu)) {
+                int[] posicoes = retornarPosicoes(jogadaCompleta);
+                if (validarPosicoes(posicoes)) {
+                    if (tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] == 1) {
+                        if (tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] == 1) {
+                            tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 4;
+                        } else {
+                            tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 3;
+                        }
+                    } else {
+                        if (tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] == 1) {
+                            tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 5;
+                        } else {
+                            tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 2;
+                        }
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                System.out.println("Posição inválida");
+                return false;
+            }
+
+            tabuleiro.exibirTabuleiroDosDoisJogadores();
+            return true;
+
+        }
+        return false;
     }
 }

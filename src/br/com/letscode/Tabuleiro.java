@@ -52,11 +52,6 @@ public class Tabuleiro {
         return novoTabuleiro;
     }
 
-//    public void inserirOsNaviosNosTabuleiros() {
-//        tabuleiroJogador = retornarNovoTabuleiroComNavios(false);
-//        tabuleiroCpu = retornarNovoTabuleiroComNavios(true);
-//    }
-
     public void exibirTabuleiro(String nomeJogador, int[][] tabuleiro, boolean computador) {
         System.out.println("---------------------------------------------");
         if(!computador){
@@ -107,5 +102,11 @@ public class Tabuleiro {
     public void exibirTabuleiroDosDoisJogadores () {
         exibirTabuleiro("JOGADOR", tabuleiroJogador, false);
         exibirTabuleiro("COMPUTADOR", tabuleiroCpu, true);
+    }
+
+    private void finalizaJogo(){
+
+
+
     }
 }
