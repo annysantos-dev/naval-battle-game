@@ -8,6 +8,8 @@ public class Jogo {
     Scanner input;
     int morteCPU = 0;
     int morteJogador = 0;
+    int finalizaJogo = 0;
+    boolean finalizaJogoCompleto = false;
 
     Tabuleiro tabuleiro = new Tabuleiro();
 
@@ -76,18 +78,24 @@ public class Jogo {
                     if (tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] == 1) {
                         tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 4;
                         morteJogador++;
-                        if (morteJogador == 2){
+                        if (morteJogador == 10){
                             System.out.println("O jogador Venceu...");
-                            tabuleiro.exibirTabuleiroDosDoisJogadores();
-                            System.exit(0);
+                            System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
+                            finalizaJogo = finalizaJogo + 10;
+                            if (finalizaJogo == 10){
+                                finalizaJogoCompleto = true;
+                            }
                         }
                     } else {
                         tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 3;;
                         morteJogador++;
-                        if (morteJogador == 2){
+                        if (morteJogador == 10){
                             System.out.println("O jogador Venceu...");
-                            tabuleiro.exibirTabuleiroDosDoisJogadores();
-                            System.exit(0);
+                            System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
+                            finalizaJogo = finalizaJogo + 10;
+                            if (finalizaJogo == 10){
+                                finalizaJogoCompleto = true;
+                            }
                         }
                     }
                 } else {
@@ -103,6 +111,11 @@ public class Jogo {
         } else {
             System.out.println("Posição inválida");
             return false;
+        }
+
+        if (finalizaJogoCompleto == true){
+            tabuleiro.exibirTabuleiroDosDoisJogadores();
+            System.exit(0);
         }
 
         jogadaCPU();
@@ -204,19 +217,25 @@ public class Jogo {
                         if (tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] == 1) {
                             tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 4;
                             morteCPU = morteCPU + 1;
-                            if (morteCPU == 2){
+                            if (morteCPU == 10){
                                 System.out.println("A CPU venceu...");
-                                tabuleiro.exibirTabuleiroDosDoisJogadores();
-                                System.exit(0);
+                                System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
+                                finalizaJogo = finalizaJogo + 10;
+                                if (finalizaJogo == 10){
+                                    finalizaJogoCompleto = true;
+                                }
                             }
                         } else {
 
                             tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 3;
                             morteCPU = morteCPU + 1;
-                            if (morteCPU == 2){
+                            if (morteCPU == 10){
                                 System.out.println("A CPU Venceu...");
-                                tabuleiro.exibirTabuleiroDosDoisJogadores();
-                                System.exit(0);
+                                System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
+                                finalizaJogo = finalizaJogo + 10;
+                                if (finalizaJogo == 10){
+                                    finalizaJogoCompleto = true;
+                                }
                             }
                         }
                     } else {
@@ -233,6 +252,14 @@ public class Jogo {
                 System.out.println("Posição inválida");
                 return false;
             }
+
+            tabuleiro.exibirTabuleiroDosDoisJogadores();
+
+            if (finalizaJogoCompleto == true){
+                tabuleiro.exibirTabuleiroDosDoisJogadores();
+                System.exit(0);
+            }
+
             return true;
         }
         return false;
