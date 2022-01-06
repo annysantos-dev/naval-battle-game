@@ -5,8 +5,6 @@ public class Main {
 
        Jogo jogo = new Jogo();
        jogo.telaInicial();
-       Tabuleiro tab = new Tabuleiro();
-       tab.exibirTabuleiroDosDoisJogadores();
 
     }
 }

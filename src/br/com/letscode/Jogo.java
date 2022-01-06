@@ -6,6 +6,8 @@ import java.util.Random;
 public class Jogo {
 
     Scanner input;
+    int morteCPU = 0;
+    int morteJogador = 0;
 
     Tabuleiro tabuleiro = new Tabuleiro();
 
@@ -73,8 +75,20 @@ public class Jogo {
                 if (tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] == 1) {
                     if (tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] == 1) {
                         tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 4;
+                        morteJogador++;
+                        if (morteJogador == 2){
+                            System.out.println("O jogador Venceu...");
+                            tabuleiro.exibirTabuleiroDosDoisJogadores();
+                            System.exit(0);
+                        }
                     } else {
-                        tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 3;
+                        tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 3;;
+                        morteJogador++;
+                        if (morteJogador == 2){
+                            System.out.println("O jogador Venceu...");
+                            tabuleiro.exibirTabuleiroDosDoisJogadores();
+                            System.exit(0);
+                        }
                     }
                 } else {
                     if (tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] == 1) {
@@ -173,8 +187,6 @@ public class Jogo {
 
     public boolean jogadaCPU(){
 
-        System.out.println("CPU jogou...");
-
         Random jogadaCpu = new Random();
         String letraJogador = "abcdefghij", numeroJogador = "0123456789";
 
@@ -184,7 +196,6 @@ public class Jogo {
             String novoNumero = String.valueOf(numeroJogador.charAt(jogadaCpu.nextInt(numeroJogador.length()))).toUpperCase();
             String jogadaCompleta = novaLetra + novoNumero;
             String verificacaoCpu = "^[A-Za-z]{1}[0-9]{1}$";
-            System.out.println(jogadaCompleta);
 
             if (jogadaCompleta.matches(verificacaoCpu)) {
                 int[] posicoes = retornarPosicoes(jogadaCompleta);
@@ -192,8 +203,21 @@ public class Jogo {
                     if (tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] == 1) {
                         if (tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] == 1) {
                             tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 4;
+                            morteCPU = morteCPU + 1;
+                            if (morteCPU == 2){
+                                System.out.println("A CPU venceu...");
+                                tabuleiro.exibirTabuleiroDosDoisJogadores();
+                                System.exit(0);
+                            }
                         } else {
+
                             tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 3;
+                            morteCPU = morteCPU + 1;
+                            if (morteCPU == 2){
+                                System.out.println("A CPU Venceu...");
+                                tabuleiro.exibirTabuleiroDosDoisJogadores();
+                                System.exit(0);
+                            }
                         }
                     } else {
                         if (tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] == 1) {
@@ -209,10 +233,7 @@ public class Jogo {
                 System.out.println("Posição inválida");
                 return false;
             }
-
-            tabuleiro.exibirTabuleiroDosDoisJogadores();
             return true;
-
         }
         return false;
     }
