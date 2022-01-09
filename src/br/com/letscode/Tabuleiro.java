@@ -103,4 +103,10 @@ public class Tabuleiro {
         exibirTabuleiro("JOGADOR", tabuleiroJogador, false);
         exibirTabuleiro("COMPUTADOR", tabuleiroCpu, true);
     }
+
+    private void finalizaJogo(){
+
+
+
+    }
 }
