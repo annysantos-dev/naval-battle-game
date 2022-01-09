@@ -2,8 +2,8 @@ package br.com.letscode.model;
 
 public class Tabuleiro {
     private static int tamanhoX = 10, tamanhoY = 10;
-    public static  int posicionarManualmente = 2;
-    public static  int tabuleiroJogador[][] = new int[tamanhoX][tamanhoY], tabuleiroCpu[][]  = new int[tamanhoX][tamanhoY];
+    private static  int posicionarManualmente = 2;
+    private static  int tabuleiroJogador[][] = new int[tamanhoX][tamanhoY], tabuleiroCpu[][]  = new int[tamanhoX][tamanhoY];
 
 
     public static int getTamanhoX() {
@@ -18,11 +18,16 @@ public class Tabuleiro {
         return posicionarManualmente;
     }
 
-    public static int[][] getTabuleiroJogador() {
-        return tabuleiroJogador;
+    public int getTabuleiroJogador(int p1, int p2) {
+        return tabuleiroJogador[p1][p2];
     }
 
-    public static int[][] getTabuleiroCpu() {
+    public  int[][] getTabuleiroCpu() {
+
         return tabuleiroCpu;
+    }
+
+    public  void setTabuleiroJogador(int[][] tabuleiroJogador) {
+        Tabuleiro.tabuleiroJogador = tabuleiroJogador;
     }
 }
