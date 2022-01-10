@@ -1,6 +1,6 @@
 package br.com.letscode.view;
 
-public interface Jogo {
+public interface JogoView {
 
     void telaInicial();
 

@@ -1,6 +1,6 @@
 package br.com.letscode.view;
 
-public interface Tabuleiro {
+public interface TabuleiroView {
 
     int[][] novoTabuleiroComNavios(boolean computador);
 

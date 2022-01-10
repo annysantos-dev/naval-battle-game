@@ -1,22 +1,23 @@
 package br.com.letscode.controller;
 
+import br.com.letscode.model.Jogo;
 import br.com.letscode.model.Tabuleiro;
-import br.com.letscode.view.Jogo;
-
-
-
+import br.com.letscode.view.JogoView;
 import java.util.Random;
 import java.util.Scanner;
 
-public class JogoController implements Jogo {
+public class JogoController implements JogoView {
+
+    Jogo jogo;
     Tabuleiro tabuleiro;
-    br.com.letscode.view.Tabuleiro t;
+    TabuleiroController t;
     Scanner leitor;
 
-    public JogoController(Tabuleiro tabuleiro, Scanner leitor, br.com.letscode.view.Tabuleiro t) {
-        this.tabuleiro = tabuleiro;
-        this.leitor = leitor;
-        this.t = t;
+    public JogoController() {
+        this.jogo = new Jogo(0,0,0, false);
+        this.tabuleiro = new Tabuleiro();
+        this.t = new TabuleiroController();
+        this.leitor = new Scanner(System.in);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class JogoController implements Jogo {
 
         boolean continuarJogo = true;
         do {
-            t.exibirTabuleiro("JOGADOR", tabuleiro.tabuleiroJogador, false);
+            t.exibirTabuleiro("JOGADOR", tabuleiro.getTabuleiroJogador(), false);
             if (jogada()) {
             }
         } while (continuarJogo);
@@ -81,17 +82,18 @@ public class JogoController implements Jogo {
         if (tiroDoJogador.matches(verificacao)) {
             int[] posicoes = retornarPosicoes(tiroDoJogador);
             if (validarPosicoes(posicoes)) {
-                if (tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] == 1) {
-                    if (tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] == 1) {
-                        tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 4;
+                System.out.println(tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) + " " + tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]));
+                if (tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 1) {
+                    if (tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 1) {
+                        tabuleiro.setTabuleiroJogadorPosicao(posicoes[0],posicoes[1], 4);
                     } else {
-                        tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 3;
+                        tabuleiro.setTabuleiroJogadorPosicao(posicoes[0],posicoes[1], 3);
                     }
                 } else {
-                    if (tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] == 1) {
-                        tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 5;
+                    if (tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 1) {
+                        tabuleiro.setTabuleiroJogadorPosicao(posicoes[0],posicoes[1], 5);
                     } else {
-                        tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 2;
+                        tabuleiro.setTabuleiroJogadorPosicao(posicoes[0],posicoes[1], 2);
                     }
                 }
             } else {
@@ -102,8 +104,8 @@ public class JogoController implements Jogo {
             return false;
         }
 
-        jogadaCPU();
-        return true;
+
+        return jogadaCPU();
     }
 
     @Override
@@ -132,11 +134,11 @@ public class JogoController implements Jogo {
                         quantidadeNavios++;
                     }
                 } while (quantidadeNavios < 10);
-                tabuleiro.tabuleiroCpu = t.novoTabuleiroComNavios(true);
+                tabuleiro.setTabuleiroCpu(t.novoTabuleiroComNavios(true));
                 break;
             case 2:
-                tabuleiro.tabuleiroJogador = t.novoTabuleiroComNavios(false);
-                tabuleiro.tabuleiroCpu = t.novoTabuleiroComNavios(true);
+                tabuleiro.setTabuleiroJogador(t.novoTabuleiroComNavios(false));
+                tabuleiro.setTabuleiroCpu(t.novoTabuleiroComNavios(true));
                 break;
             default:
                 posicionarNaviosManualOuAutomatico();
@@ -152,8 +154,8 @@ public class JogoController implements Jogo {
         if (tiroDoJogador.matches(verificacao)) {
             int[] posicoes = retornarPosicoes(tiroDoJogador);
             if (validarPosicoes(posicoes)) {
-                if (tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] == 0) {
-                    tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 1;
+                if (tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 0) {
+                    tabuleiro.setTabuleiroJogadorPosicao(posicoes[0],posicoes[1], 1);
                 } else {
                     return false;
                 }
@@ -200,36 +202,35 @@ public class JogoController implements Jogo {
             if (jogadaCompleta.matches(verificacaoCpu)) {
                 int[] posicoes = retornarPosicoes(jogadaCompleta);
                 if (validarPosicoes(posicoes)) {
-                    if (tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] == 1) {
-                        if (tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] == 1) {
-                            tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 4;
-                            morteCPU = morteCPU + 1;
-                            if (morteCPU == 10){
+                    if (tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 1) {
+                        if (tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 1) {
+                            tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1],4);
+                            jogo.setMorteCPU(jogo.getMorteCPU() + 1);
+                            if (jogo.getMorteCPU() == 10){
                                 System.out.println("A CPU venceu...");
                                 System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
-                                finalizaJogo = finalizaJogo + 10;
-                                if (finalizaJogo == 10){
-                                    finalizaJogoCompleto = true;
+                                jogo.setFinalizaJogo(jogo.getFinalizaJogo() + 10);
+                                if (jogo.getFinalizaJogo() == 10){
+                                    jogo.setFinalizaJogoCompleto(true);
                                 }
                             }
                         } else {
-
-                            tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 3;
-                            morteCPU = morteCPU + 1;
-                            if (morteCPU == 10){
+                            tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1],3);
+                            jogo.setMorteCPU(jogo.getMorteCPU() + 1);
+                            if (jogo.getMorteCPU()  == 10){
                                 System.out.println("A CPU Venceu...");
                                 System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
-                                finalizaJogo = finalizaJogo + 10;
-                                if (finalizaJogo == 10){
-                                    finalizaJogoCompleto = true;
+                                jogo.setFinalizaJogo(jogo.getFinalizaJogo() + 10);
+                                if (jogo.getFinalizaJogo() == 10){
+                                    jogo.setFinalizaJogoCompleto(true);
                                 }
                             }
                         }
                     } else {
-                        if (tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] == 1) {
-                            tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 5;
+                        if (tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 1) {
+                            tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1],5);
                         } else {
-                            tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] = 2;
+                            tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1],2);
                         }
                     }
                 } else {
@@ -240,16 +241,15 @@ public class JogoController implements Jogo {
                 return false;
             }
 
-            tabuleiro.exibirTabuleiroDosDoisJogadores();
-
-            if (finalizaJogoCompleto == true){
-                tabuleiro.exibirTabuleiroDosDoisJogadores();
+            t.exibirTabuleiroDosDoisJogadores();
+            System.out.println("chegou" + jogo.isFinalizaJogoCompleto());
+            if (jogo.isFinalizaJogoCompleto() == true){
+                t.exibirTabuleiroDosDoisJogadores();
                 System.exit(0);
             }
 
             return true;
         }
         return false;
-    }
     }
 }
