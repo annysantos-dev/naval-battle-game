@@ -1,7 +1,6 @@
 package br.com.letscode.controller;
 
 import br.com.letscode.model.Jogo;
-import br.com.letscode.model.Tabuleiro;
 import br.com.letscode.view.JogoView;
 import java.util.Random;
 import java.util.Scanner;
@@ -80,19 +79,35 @@ public class JogoController implements JogoView {
         if (tiroDoJogador.matches(verificacao)) {
             int[] posicoes = retornarPosicoes(tiroDoJogador);
             if (validarPosicoes(posicoes)) {
-                System.out.println(t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) + " " + t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]));
                 if (t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 1) {
                     if (t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 1) {
-                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0],posicoes[1], 4);
+                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 4);
+                        jogo.setMorteJogador(jogo.getMorteJogador() + 1);
+                        if (jogo.getMorteJogador() == 10){
+                            System.out.println("O jogador Venceu...");
+                            System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
+                            jogo.setFinalizaJogo(jogo.getFinalizaJogo() + 10);
+                            if (jogo.getFinalizaJogo() == 10){
+                                jogo.setFinalizaJogoCompleto(true);
+                            }
+                        }
                     } else {
-                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0],posicoes[1], 3);
+                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 3);
+                        jogo.setMorteJogador(jogo.getMorteJogador() + 1);
+                        if (jogo.getMorteJogador() == 10){
+                            System.out.println("O jogador Venceu...");
+                            System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
+                            jogo.setFinalizaJogo(jogo.getFinalizaJogo() + 10);
+                            if (jogo.getFinalizaJogo() == 10){
+                                jogo.setFinalizaJogoCompleto(true);
+                            }
+                        }
                     }
-
                 } else {
                     if (t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 1) {
-                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0],posicoes[1], 5);
+                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 5);
                     } else {
-                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0],posicoes[1], 2);
+                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 2);
                     }
                 }
             } else {
@@ -103,16 +118,21 @@ public class JogoController implements JogoView {
             return false;
         }
 
+        if (jogo.isFinalizaJogoCompleto() == true){
+            t.exibirTabuleiroDosDoisJogadores();
+            System.exit(0);
+        }
 
-        return jogadaCPU();
+        jogadaCPU();
+        return true;
     }
 
     @Override
     public int[] retornarPosicoes(String tiroDoJogador) {
-        int[] returno = new int[2];
-        returno[0] = tiroDoJogador.toUpperCase().charAt(0) - 65;
-        returno[1] = Integer.parseInt(tiroDoJogador.substring(1));
-        return returno;
+        int[] retorno = new int[2];
+        retorno[0] = tiroDoJogador.toUpperCase().charAt(0) - 65;
+        retorno[1] = Integer.parseInt(tiroDoJogador.substring(1));
+        return retorno;
     }
 
     @Override
@@ -239,8 +259,6 @@ public class JogoController implements JogoView {
                 System.out.println("Posição inválida");
                 return false;
             }
-
-            t.exibirTabuleiroDosDoisJogadores();
 
             if (jogo.isFinalizaJogoCompleto() == true){
                 t.exibirTabuleiroDosDoisJogadores();
