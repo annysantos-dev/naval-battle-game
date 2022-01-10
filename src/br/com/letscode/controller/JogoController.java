@@ -1,8 +1,8 @@
 package br.com.letscode.controller;
 
-
 import br.com.letscode.model.Tabuleiro;
 import br.com.letscode.view.Jogo;
+
 
 
 import java.util.Random;
@@ -10,11 +10,13 @@ import java.util.Scanner;
 
 public class JogoController implements Jogo {
     Tabuleiro tabuleiro;
+    br.com.letscode.view.Tabuleiro t;
     Scanner leitor;
 
-    public JogoController(Tabuleiro tabuleiro, Scanner leitor) {
+    public JogoController(Tabuleiro tabuleiro, Scanner leitor, br.com.letscode.view.Tabuleiro t) {
         this.tabuleiro = tabuleiro;
         this.leitor = leitor;
+        this.t = t;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class JogoController implements Jogo {
 
         boolean continuarJogo = true;
         do {
-            tabuleiro.exibirTabuleiro("JOGADOR", tabuleiro.getTabuleiroJogador(), false);
+            t.exibirTabuleiro("JOGADOR", tabuleiro.tabuleiroJogador, false);
             if (jogada()) {
             }
         } while (continuarJogo);
@@ -79,9 +81,9 @@ public class JogoController implements Jogo {
         if (tiroDoJogador.matches(verificacao)) {
             int[] posicoes = retornarPosicoes(tiroDoJogador);
             if (validarPosicoes(posicoes)) {
-                if (tabuleiro.TabuleiroCpu[posicoes[0]][posicoes[1]] == 1) {
-                    if (tabuleiro.getTabuleiroJogador([posicoes[0]][posicoes[1]])== 1) {
-                        tabuleiro.settabuleiroJogador[posicoes[0]][posicoes[1]] = 4;
+                if (tabuleiro.tabuleiroCpu[posicoes[0]][posicoes[1]] == 1) {
+                    if (tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] == 1) {
+                        tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 4;
                     } else {
                         tabuleiro.tabuleiroJogador[posicoes[0]][posicoes[1]] = 3;
                     }
@@ -119,9 +121,9 @@ public class JogoController implements Jogo {
         System.out.println("Você deseja posicionar seus navios ou quer que sejam posicionados de forma automática?");
         System.out.println("1 - Posicionar Manualmente");
         System.out.println("2 - Posicionar Automaticamente");
-        tabuleiro.posicionarManualmente = leitor.nextInt();
+        tabuleiro.setPosicionarManualmente(leitor.nextInt());
 
-        switch (tabuleiro.posicionarManualmente) {
+        switch (tabuleiro.getPosicionarManualmente()) {
             case 1:
                 int quantidadeNavios = 0;
                 do {
@@ -130,14 +132,14 @@ public class JogoController implements Jogo {
                         quantidadeNavios++;
                     }
                 } while (quantidadeNavios < 10);
-                tabuleiro.tabuleiroCpu = tabuleiro.retornarNovoTabuleiroComNavios(true);
+                tabuleiro.tabuleiroCpu = t.novoTabuleiroComNavios(true);
                 break;
             case 2:
-                tabuleiro.tabuleiroJogador = tabuleiro.retornarNovoTabuleiroComNavios(false);
-                tabuleiro.tabuleiroCpu = tabuleiro.retornarNovoTabuleiroComNavios(true);
+                tabuleiro.tabuleiroJogador = t.novoTabuleiroComNavios(false);
+                tabuleiro.tabuleiroCpu = t.novoTabuleiroComNavios(true);
                 break;
             default:
-                perguntaPosicionarNaviosManualOuAutomatico();
+                posicionarNaviosManualOuAutomatico();
         }
     }
 

@@ -7,6 +7,4 @@ public interface Tabuleiro {
     void exibirTabuleiro(String nomeJogador, int[][] tabuleiro, boolean computador);
 
     void exibirTabuleiroDosDoisJogadores ();
-
-    void finalizaJogo();
 }
