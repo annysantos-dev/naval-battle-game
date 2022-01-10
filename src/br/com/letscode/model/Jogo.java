@@ -1,7 +1,5 @@
 package br.com.letscode.model;
 
-import java.util.Scanner;
-
 public class Jogo {
 
     private int morteCPU;
@@ -33,7 +31,7 @@ public class Jogo {
     }
 
     public void setMorteCPU(int morteCPU) {
-        morteCPU = morteCPU;
+        this.morteCPU = morteCPU;
     }
 
     public void setMorteJogador(int morteJogador) {
