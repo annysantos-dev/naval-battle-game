@@ -187,7 +187,7 @@ public class JogoController implements JogoView {
                     if(posicionarNavio) {
                         quantidadeNavios++;
                     }
-                } while (quantidadeNavios < 1);
+                } while (quantidadeNavios < 10);
                 t.tabuleiro.setTabuleiroCpu(t.novoTabuleiroComNavios(true));
                 break;
             case 2:
