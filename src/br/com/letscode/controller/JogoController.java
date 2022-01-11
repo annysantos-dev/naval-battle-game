@@ -79,9 +79,14 @@ public class JogoController implements JogoView {
         if (tiroDoJogador.matches(verificacao)) {
             int[] posicoes = retornarPosicoes(tiroDoJogador);
             if (validarPosicoes(posicoes)) {
-                if (t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 1) {
+                if (t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 1
+                    || t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 4
+                    || t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 5)
+                {
                     if (t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 1) {
                         t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 4);
+                        t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 0);
+
                         jogo.setMorteJogador(jogo.getMorteJogador() + 1);
                         if (jogo.getMorteJogador() == 10){
                             System.out.println("O jogador Venceu...");
@@ -93,6 +98,15 @@ public class JogoController implements JogoView {
                         }
                     } else {
                         t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 3);
+
+                        if(t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 5) {
+                            t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 2);
+                        } else if(t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 4){
+                            t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 3);
+                        } else {
+                            t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 0);
+                        }
+
                         jogo.setMorteJogador(jogo.getMorteJogador() + 1);
                         if (jogo.getMorteJogador() == 10){
                             System.out.println("O jogador Venceu...");
@@ -221,9 +235,22 @@ public class JogoController implements JogoView {
             if (jogadaCompleta.matches(verificacaoCpu)) {
                 int[] posicoes = retornarPosicoes(jogadaCompleta);
                 if (validarPosicoes(posicoes)) {
-                    if (t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 1) {
+                    if (t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 1
+                            || t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 4
+                            || t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 5)
+                    {
                         if (t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 1) {
                             t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1],4);
+
+                            if(t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 5) {
+                                t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1],2);
+                            } else if(t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 4){
+                                t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1],3);
+                            } else {
+                                t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1],0);
+                            }
+
+
                             jogo.setMorteCPU(jogo.getMorteCPU() + 1);
                             if (jogo.getMorteCPU() == 10){
                                 System.out.println("A CPU venceu...");
@@ -235,6 +262,8 @@ public class JogoController implements JogoView {
                             }
                         } else {
                             t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1],3);
+                            t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1],0);
+
                             jogo.setMorteCPU(jogo.getMorteCPU() + 1);
                             if (jogo.getMorteCPU()  == 10){
                                 System.out.println("A CPU Venceu...");

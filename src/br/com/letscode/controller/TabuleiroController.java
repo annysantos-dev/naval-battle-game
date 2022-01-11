@@ -19,7 +19,6 @@ public class TabuleiroController implements TabuleiroView {
         int quantidadeRestanteDeNavios = 10;
         int x = 0, y = 0;
 
-        System.out.println("Posicao " + tabuleiro.getPosicionarManualmente());
         if (tabuleiro.getPosicionarManualmente() == 2 || computador) {
             Random rand = new Random();
             do {
