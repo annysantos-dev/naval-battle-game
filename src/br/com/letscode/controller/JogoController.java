@@ -70,6 +70,71 @@ public class JogoController implements JogoView {
 
     }
 
+    private void validaFimDeJogo(boolean cpu) {
+        if(cpu) {
+            jogo.setMorteCPU(jogo.getMorteCPU() + 1);
+            if (jogo.getMorteCPU() == 10){
+                System.out.println("O COMPUTADOR VENCEU!!!");
+                System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
+                jogo.setFinalizaJogo(jogo.getFinalizaJogo() + 10);
+                if (jogo.getFinalizaJogo() == 10) {
+                    jogo.setFinalizaJogoCompleto(true);
+                }
+            }
+        } else {
+            jogo.setMorteJogador(jogo.getMorteJogador() + 1);
+            if (jogo.getMorteJogador() == 10) {
+                System.out.println("O JOGADOR VENCEU!!!");
+                System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
+                jogo.setFinalizaJogo(jogo.getFinalizaJogo() + 10);
+                if (jogo.getFinalizaJogo() == 10) {
+                    jogo.setFinalizaJogoCompleto(true);
+                }
+            }
+        }
+    }
+
+    public int posicaoTabuleiro(int[] posicoes, boolean cpu) {
+        if (cpu) {
+            return t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]);
+        }
+
+        return t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]);
+    }
+
+    public void validarTiroJogador(int[] posicoes) {
+        if (posicaoTabuleiro(posicoes, false) == 3) {
+            return;
+        }
+
+        if (posicaoTabuleiro(posicoes, true) == 1 || posicaoTabuleiro(posicoes, true) == 4 || posicaoTabuleiro(posicoes, true) == 5) {
+            if (posicaoTabuleiro(posicoes, false) == 1) {
+                t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 4);
+                t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 0);
+
+                validaFimDeJogo(false);
+            } else {
+                t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 3);
+
+                if (posicaoTabuleiro(posicoes, true) == 5) {
+                    t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 2);
+                } else if (posicaoTabuleiro(posicoes, true) == 4) {
+                    t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 3);
+                } else {
+                    t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 0);
+                }
+
+                validaFimDeJogo(false);
+            }
+        } else {
+            if (posicaoTabuleiro(posicoes, true) == 1) {
+                t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 5);
+            } else {
+                t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 2);
+            }
+        }
+    }
+
     @Override
     public boolean jogada() {
         System.out.println("Digite a posição do seu tiro. Letra seguida do número: Ex. A2");
@@ -79,51 +144,7 @@ public class JogoController implements JogoView {
         if (tiroDoJogador.matches(verificacao)) {
             int[] posicoes = retornarPosicoes(tiroDoJogador);
             if (validarPosicoes(posicoes)) {
-                if (t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 1
-                    || t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 4
-                    || t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 5)
-                {
-                    if (t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 1) {
-                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 4);
-                        t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 0);
-
-                        jogo.setMorteJogador(jogo.getMorteJogador() + 1);
-                        if (jogo.getMorteJogador() == 10){
-                            System.out.println("O jogador Venceu...");
-                            System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
-                            jogo.setFinalizaJogo(jogo.getFinalizaJogo() + 10);
-                            if (jogo.getFinalizaJogo() == 10){
-                                jogo.setFinalizaJogoCompleto(true);
-                            }
-                        }
-                    } else {
-                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 3);
-
-                        if(t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 5) {
-                            t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 2);
-                        } else if(t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 4){
-                            t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 3);
-                        } else {
-                            t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 0);
-                        }
-
-                        jogo.setMorteJogador(jogo.getMorteJogador() + 1);
-                        if (jogo.getMorteJogador() == 10){
-                            System.out.println("O jogador Venceu...");
-                            System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
-                            jogo.setFinalizaJogo(jogo.getFinalizaJogo() + 10);
-                            if (jogo.getFinalizaJogo() == 10){
-                                jogo.setFinalizaJogoCompleto(true);
-                            }
-                        }
-                    }
-                } else {
-                    if (t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 1) {
-                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 5);
-                    } else {
-                        t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 2);
-                    }
-                }
+                validarTiroJogador(posicoes);
             } else {
                 return false;
             }
@@ -220,6 +241,39 @@ public class JogoController implements JogoView {
         return retorno;
     }
 
+    public void validarTiroCpu(int[] posicoes) {
+        if (posicaoTabuleiro(posicoes, true) == 3) {
+            return;
+        }
+
+        if (posicaoTabuleiro(posicoes, false) == 1 || posicaoTabuleiro(posicoes, false) == 4 || posicaoTabuleiro(posicoes, false) == 5) {
+            if (posicaoTabuleiro(posicoes, true) == 1) {
+                t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 4);
+
+                if (posicaoTabuleiro(posicoes, false) == 5) {
+                    t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 2);
+                } else if (posicaoTabuleiro(posicoes, false) == 4) {
+                    t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 3);
+                } else {
+                    t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 0);
+                }
+
+                validaFimDeJogo(true);
+            } else {
+                t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 3);
+                t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1], 0);
+
+                validaFimDeJogo(true);
+            }
+        } else {
+            if (posicaoTabuleiro(posicoes, true) == 1) {
+                t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 5);
+            } else {
+                t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1], 2);
+            }
+        }
+    }
+
     @Override
     public boolean jogadaCPU() {
         Random jogadaCpu = new Random();
@@ -235,52 +289,7 @@ public class JogoController implements JogoView {
             if (jogadaCompleta.matches(verificacaoCpu)) {
                 int[] posicoes = retornarPosicoes(jogadaCompleta);
                 if (validarPosicoes(posicoes)) {
-                    if (t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 1
-                            || t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 4
-                            || t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 5)
-                    {
-                        if (t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 1) {
-                            t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1],4);
-
-                            if(t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 5) {
-                                t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1],2);
-                            } else if(t.tabuleiro.getTabuleiroJogador(posicoes[0], posicoes[1]) == 4){
-                                t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1],3);
-                            } else {
-                                t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1],0);
-                            }
-
-
-                            jogo.setMorteCPU(jogo.getMorteCPU() + 1);
-                            if (jogo.getMorteCPU() == 10){
-                                System.out.println("A CPU venceu...");
-                                System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
-                                jogo.setFinalizaJogo(jogo.getFinalizaJogo() + 10);
-                                if (jogo.getFinalizaJogo() == 10){
-                                    jogo.setFinalizaJogoCompleto(true);
-                                }
-                            }
-                        } else {
-                            t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1],3);
-                            t.tabuleiro.setTabuleiroJogadorPosicao(posicoes[0], posicoes[1],0);
-
-                            jogo.setMorteCPU(jogo.getMorteCPU() + 1);
-                            if (jogo.getMorteCPU()  == 10){
-                                System.out.println("A CPU Venceu...");
-                                System.out.println("Os Dois Tabuleiros Surgindo em 3..2..1");
-                                jogo.setFinalizaJogo(jogo.getFinalizaJogo() + 10);
-                                if (jogo.getFinalizaJogo() == 10){
-                                    jogo.setFinalizaJogoCompleto(true);
-                                }
-                            }
-                        }
-                    } else {
-                        if (t.tabuleiro.getTabuleiroCpu(posicoes[0], posicoes[1]) == 1) {
-                            t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1],5);
-                        } else {
-                            t.tabuleiro.setTabuleiroCpuPosicao(posicoes[0], posicoes[1],2);
-                        }
-                    }
+                    validarTiroCpu(posicoes);
                 } else {
                     return false;
                 }
